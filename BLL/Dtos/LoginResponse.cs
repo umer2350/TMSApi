@@ -1,5 +1,4 @@
-﻿using BLL.Dtos.Menu;
-using Data.Models;
+﻿using Data.Models;
 using System.Collections.Generic;
 
 namespace BLL.Dtos

@@ -1,8 +1,4 @@
-﻿
-
-using AHDBLL.Dtos.Request;
-using BLL.Dtos;
-using BLL.Dtos.Menu;
+﻿using BLL.Dtos;
 using Data.Models;
 using Data.Repositories;
 using System;
@@ -90,25 +86,6 @@ namespace BLL.Services
             }
         }
 
-        public List<UserDto> List(UserListRequestDto req)
-        {
-            try
-            {
-                List<UserDto> users = new List<UserDto>();
-                using (var userData = new UserRepository())
-                {
-                    var usersDataset = userData.List(req.PageNo);
-                    users = UsersDStoList(usersDataset);
-
-                }
-                return users;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
         public ApiResponseMessage Save(UserDto user, int loggedInUserId)
         {
             var response = new ApiResponseMessage();
@@ -125,14 +102,12 @@ namespace BLL.Services
 
                     obj.FirstName = user.FirstName;
                     obj.LastName = user.LastName;
-                    obj.DateOfBirth = user.DateOfBirth;
                     obj.Email = user.Email;
                     obj.Phone = user.Phone;
                     obj.CountryId = user.CountryId;
-                    obj.State = user.State;
                     obj.City = user.City;
                     obj.Address = user.Address;
-                    obj.Zip = user.Zip;
+                    obj.ProfilePic = user.ProfilePic;
 
                     if (user.Id > 0)
                     {
@@ -171,51 +146,6 @@ namespace BLL.Services
                 using (var userData = new UserRepository())
                 {
                     return userData.Get(Id);
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-        public List<User> GetPending()
-        {
-            try
-            {
-                using (var userData = new UserRepository())
-                {
-                    return userData.GetUsersByStatus(Convert.ToInt32(UserStatus.Pending));
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-        public List<User> GetApproved()
-        {
-            try
-            {
-                using (var userData = new UserRepository())
-                {
-                    return userData.GetUsersByStatus(Convert.ToInt32(UserStatus.Approved));
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-        public List<User> GetRejected()
-        {
-            try
-            {
-                using (var userData = new UserRepository())
-                {
-                    return userData.GetUsersByStatus(Convert.ToInt32(UserStatus.Rejected));
                 }
             }
             catch (Exception ex)
@@ -292,61 +222,6 @@ namespace BLL.Services
                 return "valid";
         }
 
-        private List<UserDto> UsersDStoList(DataSet ds)
-        {
-            List<UserDto> users = new List<UserDto>();
-            var table = ds.Tables[0];
-            if (table != null && table.Rows.Count > 0)
-            {
-                try
-                {
-                    foreach (DataRow row in table.Rows)
-                    {
-                        var obj = new UserDto();
-                        obj.Id = int.Parse(row["Id"] + "");
-                        obj.Username = row["Username"] + "";
-                        obj.FirstName = row["FirstName"] + "";
-                        obj.LastName = row["LastName"] + "";
-
-                        if (!string.IsNullOrEmpty(row["DateOfBirth"] + ""))
-                        {
-                            var dbo = DateTime.Parse(row["DateOfBirth"] + "");
-                            obj.DateOfBirthStr = dbo.ToString("dd-MMMM-yyyy hh:mm tt");
-                        }
-
-                        obj.Email = row["Email"] + "";
-                        obj.Phone = row["Phone"] + "";
-                        obj.CountryId = int.Parse(row["CountryId"] + "");
-                        obj.CountryTitle = row["CountryTitle"] + "";
-                        obj.State = row["State"] + "";
-                        obj.City = row["City"] + "";
-                        obj.Address = row["Address"] + "";
-                        obj.Zip = row["Zip"] + "";
-                        obj.CompanyId = int.Parse(row["CompanyId"] + "");
-                        obj.CompanyName = row["CompanyName"] + "";
-                        obj.Status = int.Parse(row["Status"] + "");
-                        obj.StatusTitle = row["StatusTitle"] + "";
-
-                        if (!string.IsNullOrEmpty(row["CreatedOn"] + ""))
-                        {
-                            var createdDateTime = DateTime.Parse(row["CreatedOn"] + "");
-                            obj.CreatedOnStr = createdDateTime.ToString("dd-MMMM-yyyy hh:mm tt");
-                        }
-                        if (!string.IsNullOrEmpty(row["UpdatedOn"] + ""))
-                        {
-                            var updatedDateTime = DateTime.Parse(row["UpdatedOn"] + "");
-                            obj.UpdatedOnStr = updatedDateTime.ToString("dd-MMMM-yyyy hh:mm tt");
-                        }
-
-                        users.Add(obj);
-                    }
-                }
-                catch (Exception ex)
-                {
-                }
-            }
-            return users;
-        }
         public bool Delete(int ids)
         {
             try

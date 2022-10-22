@@ -19,6 +19,22 @@ namespace TMSApi.Controllers
 
         [Authorize]
         [HttpGet]
+        [Route("customers")]
+        public ActionResult Customers()
+        {
+            var result = commonHandler.Customers();
+            return Ok(result);
+        }
+        [Authorize]
+        [HttpGet]
+        [Route("workers")]
+        public ActionResult Workers()
+        {
+            var result = commonHandler.Workers();
+            return Ok(result);
+        }
+        [Authorize]
+        [HttpGet]
         [Route("countries")]
         public ActionResult Countries()
         {

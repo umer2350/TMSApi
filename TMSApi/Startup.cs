@@ -31,7 +31,6 @@ namespace TMSApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var Issuer = Configuration["Jwt:Issuer"] + "";

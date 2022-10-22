@@ -9,14 +9,14 @@ using System.Net;
 namespace TMSApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/user")]
-    public class UserController : BaseController
+    [Route("api/task")]
+    public class TaskController : BaseController
     {
-        private UserService userService;
+        private TaskService taskService;
 
-        public UserController()
+        public TaskController()
         {
-            userService = new UserService();
+            taskService = new TaskService();
         }
 
         [Authorize]
@@ -25,9 +25,9 @@ namespace TMSApi.Controllers
         public IActionResult List()
         {
             ApiResponseMessage response = new ApiResponseMessage();
-            var result = userService.List();
+            var result = taskService.List();
 
-            response.Message = result != null && result.Count > 0 ? "Users list found." : "Not Record Found.";
+            response.Message = result != null && result.Count > 0 ? "Tasks list found." : "Not Record Found.";
             response.Status = HttpStatusCode.OK;
             response.Response = result;
 
@@ -37,10 +37,10 @@ namespace TMSApi.Controllers
         [Authorize]
         [HttpPost]
         [Route("save")]
-        public ActionResult Save([FromBody]UserDto data)
+        public ActionResult Save(TaskDto data)
         {
-            var loggedInUserId = GetUserId();
-            var result = userService.Save(data, loggedInUserId);
+            var loggedInTaskId = GetUserId();
+            var result = taskService.Save(data, loggedInTaskId);
             return Ok(result);
         }
 
@@ -51,10 +51,29 @@ namespace TMSApi.Controllers
         {
 
             ApiResponseMessage response = new ApiResponseMessage();
-            var result = userService.Get(Id);
+            var result = taskService.Get(Id);
 
             if (result != null && result.Id > 0)
-                response.Message = "user Found";
+                response.Message = "task Found";
+            else
+                response.Message = "Not Found";
+            response.Status = HttpStatusCode.OK;
+            response.Response = result;
+
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("taskFiles")]
+        public ActionResult TaskFilesList(int Id)
+        {
+
+            ApiResponseMessage response = new ApiResponseMessage();
+            var result = taskService.TaskFilesList(Id);
+
+            if (result.Count > 0)
+                response.Message = "task Found";
             else
                 response.Message = "Not Found";
             response.Status = HttpStatusCode.OK;
@@ -68,7 +87,7 @@ namespace TMSApi.Controllers
         public ActionResult Delete(int Ids)
         {
             ApiResponseMessage response = new ApiResponseMessage();
-            var result = userService.Delete(Ids);
+            var result = taskService.Delete(Ids);
 
             response.Message = result ? "Deleted" : "Not Deleted";
             response.Status = HttpStatusCode.OK;

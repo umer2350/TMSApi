@@ -22,6 +22,34 @@ namespace Data.Repositories.Common
                 return null;
             }
         }
+        public List<Worker> ListWorker()
+        {
+            try
+            {
+                using (var _context = Db.Create())
+                {
+                    return _context.Workers.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public List<Customer> ListCustomer()
+        {
+            try
+            {
+                using (var _context = Db.Create())
+                {
+                    return _context.Customers.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public List<State> ListStates(int countryId)
         {
             try

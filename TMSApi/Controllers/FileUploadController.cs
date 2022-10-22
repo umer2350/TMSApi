@@ -26,9 +26,9 @@ namespace TMSApi.Controllers
         private string[] allowedProfilePicExtentions = { ".jpg", ".png", ".jpeg" };
 
         [HttpPost, DisableRequestSizeLimit]
-        [AllowAnonymous]
+        [Authorize]
         [Route("save")]
-        public async Task<IActionResult> Save(int userId, int fileType, int documentType)
+        public async Task<IActionResult> Save(int taskId, int documentType)
         {
             string contentRootPath = _webHostEnvironment.ContentRootPath;
             try
@@ -39,19 +39,19 @@ namespace TMSApi.Controllers
                 if (file.Length > 0)
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    string ext = Path.GetExtension(file.FileName).ToLower();
+                    //string ext = Path.GetExtension(file.FileName).ToLower();
 
-                    if (!string.IsNullOrEmpty(ext) && fileType.Equals(Convert.ToInt32(FileType.ProfilePicture)))
-                    {
-                        if (allowedProfilePicExtentions.Contains(ext))
-                            fileName = "profileImage" + ext;
-                        else
-                            return BadRequest();
-                    }
+                    //if (!string.IsNullOrEmpty(ext) && fileType.Equals(Convert.ToInt32(FileType.ProfilePicture)))
+                    //{
+                    //    if (allowedProfilePicExtentions.Contains(ext))
+                    //        fileName = "profileImage" + ext;
+                    //    else
+                    //        return BadRequest();
+                    //}
                     //Getting Document Folder from enum
                     string documentFolder = Enums.GetFolderNameByModule(documentType);
                     //Create Folder path
-                    var folderName = Path.Combine("Uploads", documentFolder, userId.ToString());
+                    var folderName = Path.Combine("Uploads", documentFolder, taskId.ToString());
                     var pathToSave = Path.Combine(contentRootPath, folderName);
 
                     if (!Directory.Exists(pathToSave))//check if the folder exists;
@@ -63,7 +63,7 @@ namespace TMSApi.Controllers
                     var existedFileInfo = di.GetFiles().FirstOrDefault(o => o.Name == fileName);
                     if (existedFileInfo != null && !string.IsNullOrEmpty(existedFileInfo.Name))
                         existedFileInfo.Delete();
-                    fileName = DateTime.Now.ToString("MMddyyyyhhmmss") + ext;
+                    //fileName = DateTime.Now.ToString("MMddyyyyhhmmss") + ext;
                     var fullPath = Path.Combine(pathToSave, fileName);
                     fullPath = Path.Combine(pathToSave, fileName);
                     var dbPath = Path.Combine(folderName, fileName);
@@ -91,7 +91,7 @@ namespace TMSApi.Controllers
         [AllowAnonymous]
         //[Authorize]
         [Route("get")]
-        public ActionResult Get(int userId, int documentType)
+        public ActionResult Get(int taskId, int documentType)
         {
             string contentRootPath = _webHostEnvironment.ContentRootPath;
             string result = "";
@@ -102,7 +102,7 @@ namespace TMSApi.Controllers
                 //Getting Document Folder from enum
                 string documentFolder = Enums.GetFolderNameByModule(documentType);
                 //Create Folder path
-                var folderName = Path.Combine("Uploads", documentFolder, userId.ToString());
+                var folderName = Path.Combine("Uploads", documentFolder, taskId.ToString());
                 string imagePath = Path.Combine(contentRootPath, folderName);
                 //check if the folder exists;
                 if (!Directory.Exists(imagePath))
@@ -141,7 +141,7 @@ namespace TMSApi.Controllers
         [AllowAnonymous]
         //[Authorize]
         [Route("get-all")]
-        public ActionResult GetAll(int userId, int documentType)
+        public ActionResult GetAll(int taskId, int documentType)
         {
             string contentRootPath = _webHostEnvironment.ContentRootPath;
             List<FileInfoDto> fileInfo = new List<FileInfoDto>();
@@ -150,7 +150,7 @@ namespace TMSApi.Controllers
                 //Getting Document Folder from enum
                 string documentFolder = Enums.GetFolderNameByModule(documentType);
                 //Create Folder path
-                var folderName = Path.Combine("Uploads", documentFolder, userId.ToString());
+                var folderName = Path.Combine("Uploads", documentFolder, taskId.ToString());
                 string imagePath = Path.Combine(contentRootPath, folderName);
                 //check if the folder exists;
                 if (!Directory.Exists(imagePath))
@@ -182,7 +182,7 @@ namespace TMSApi.Controllers
         [AllowAnonymous]
         //[Authorize]
         [Route("delete")]
-        public ActionResult Delete(int userId, int documentType, string fileName)
+        public ActionResult Delete(int taskId, int documentType, string fileName)
         {
             string contentRootPath = _webHostEnvironment.ContentRootPath;
             try
@@ -190,7 +190,7 @@ namespace TMSApi.Controllers
                 //Getting Document Folder from enum
                 string documentFolder = Enums.GetFolderNameByModule(documentType);
                 //Create Folder path
-                var folderName = Path.Combine("Uploads", documentFolder, userId.ToString());
+                var folderName = Path.Combine("Uploads", documentFolder, taskId.ToString());
                 string imagePath = Path.Combine(contentRootPath, folderName);
                 //check if the folder exists;
                 if (!Directory.Exists(imagePath))

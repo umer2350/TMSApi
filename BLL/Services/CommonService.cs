@@ -14,7 +14,26 @@ namespace BLL.Services
             {
                 Value = x.Id,
                 Text = x.Name,
-                Code = x.ShortName
+            }).ToList();
+            return result;
+        }
+        public object Workers()
+        {
+            var countries = new CommonRepository().ListWorker();
+            var result  = countries.Select(x => new SelectListDto()
+            {
+                Value = x.Id,
+                Text = x.FirstName + x.LastName,
+            }).ToList();
+            return result;
+        }
+        public object Customers()
+        {
+            var countries = new CommonRepository().ListCustomer();
+            var result  = countries.Select(x => new SelectListDto()
+            {
+                Value = x.Id,
+                Text = x.FirstName + x.LastName,
             }).ToList();
             return result;
         }

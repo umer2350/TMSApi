@@ -9,14 +9,14 @@ using System.Net;
 namespace TMSApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/user")]
-    public class UserController : BaseController
+    [Route("api/worker")]
+    public class WorkerController : BaseController
     {
-        private UserService userService;
+        private WorkerService workerService;
 
-        public UserController()
+        public WorkerController()
         {
-            userService = new UserService();
+            workerService = new WorkerService();
         }
 
         [Authorize]
@@ -25,9 +25,9 @@ namespace TMSApi.Controllers
         public IActionResult List()
         {
             ApiResponseMessage response = new ApiResponseMessage();
-            var result = userService.List();
+            var result = workerService.List();
 
-            response.Message = result != null && result.Count > 0 ? "Users list found." : "Not Record Found.";
+            response.Message = result != null && result.Count > 0 ? "Workers list found." : "Not Record Found.";
             response.Status = HttpStatusCode.OK;
             response.Response = result;
 
@@ -37,10 +37,10 @@ namespace TMSApi.Controllers
         [Authorize]
         [HttpPost]
         [Route("save")]
-        public ActionResult Save([FromBody]UserDto data)
+        public ActionResult Save(WorkerDto data)
         {
-            var loggedInUserId = GetUserId();
-            var result = userService.Save(data, loggedInUserId);
+            var loggedInWorkerId = GetUserId();
+            var result = workerService.Save(data, loggedInWorkerId);
             return Ok(result);
         }
 
@@ -51,10 +51,10 @@ namespace TMSApi.Controllers
         {
 
             ApiResponseMessage response = new ApiResponseMessage();
-            var result = userService.Get(Id);
+            var result = workerService.Get(Id);
 
             if (result != null && result.Id > 0)
-                response.Message = "user Found";
+                response.Message = "worker Found";
             else
                 response.Message = "Not Found";
             response.Status = HttpStatusCode.OK;
@@ -68,7 +68,7 @@ namespace TMSApi.Controllers
         public ActionResult Delete(int Ids)
         {
             ApiResponseMessage response = new ApiResponseMessage();
-            var result = userService.Delete(Ids);
+            var result = workerService.Delete(Ids);
 
             response.Message = result ? "Deleted" : "Not Deleted";
             response.Status = HttpStatusCode.OK;

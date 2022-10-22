@@ -133,48 +133,6 @@ namespace Data.Repositories
             return users;
         }
 
-        public DataSet List(int pageNo)
-        {
-            DataSet ds = new DataSet("Users");
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(Connection.GetConnectionString()))
-                {
-                    SqlCommand sqlComm = new SqlCommand("SP_GetUsersList", conn);
-                    sqlComm.Parameters.AddWithValue("@PageNumber", pageNo);
-
-                    sqlComm.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter da = new SqlDataAdapter();
-                    da.SelectCommand = sqlComm;
-
-                    da.Fill(ds);
-                }
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-        public List<User> GetUsersByStatus(int userStatus)
-        {
-            List<User> users = new List<User>();
-            try
-            {
-                using (var _context = Db.Create())
-                {
-                    users = _context.Users.ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            return users;
-
-        }
-
         public void Dispose()
         {
             GC.SuppressFinalize(true);

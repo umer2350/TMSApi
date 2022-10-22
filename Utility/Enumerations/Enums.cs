@@ -9,29 +9,18 @@ namespace Utility.Enumerations
             if (docType == Convert.ToInt32(Module.Users))
                 return "Users";
             else
+            if (docType == Convert.ToInt32(Module.Task))
+                return "Task";
+            else
                 return "";
         }
-    }
-
-    public enum FileType
-    {
-        ProfilePicture = 1,
-        Document = 2,
-        Logo = 3
     }
 
     public enum Module
     {
         Users = 1,
-        JoinUsDocs=2
+        Task=2
     }
 
-
-    public enum UserStatus
-    {
-        Pending = 0,
-        Approved = 1,
-        Rejected = 2
-    }
 
 }
