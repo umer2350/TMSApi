@@ -118,7 +118,9 @@ namespace BLL.Services
                     else
                     {
                         obj.Username = user.Username;
-                        obj.Password = user.Password;
+
+                        var encryptedPw = Encryption.Encrypt(user.Password);
+                        obj.Password = encryptedPw;
                         obj.CreatedBy = loggedInUserId;
                         obj.CreatedOn = DateTime.Now;
                         userData.Add(obj);

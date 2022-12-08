@@ -37,7 +37,7 @@ namespace TMSApi.Controllers
         [Authorize]
         [HttpPost]
         [Route("save")]
-        public ActionResult Save(CustomerDto data)
+        public ActionResult Save([FromBody]CustomerDto data)
         {
             var loggedInCustomerId = GetUserId();
             var result = customerService.Save(data, loggedInCustomerId);

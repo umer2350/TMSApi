@@ -12,6 +12,5 @@ namespace BLL.Dtos
         public string Phone { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
-        public int? RoleId { get; set; }
     }
 }

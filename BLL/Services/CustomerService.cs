@@ -49,7 +49,6 @@ namespace BLL.Services
                     obj.Phone = customer.Phone;
                     obj.City = customer.City;
                     obj.Address = customer.Address;
-                    obj.RoleId = customer.RoleId;
                     obj.ProfilePic = customer.ProfilePic;
 
                     if (customer.Id > 0)

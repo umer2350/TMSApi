@@ -17,6 +17,7 @@ namespace Data.DataContext
         }
 
         public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -54,6 +55,21 @@ namespace Data.DataContext
                 entity.Property(e => e.Name)
                     .HasMaxLength(30)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Company>(entity =>
+            {
+                entity.ToTable("Company");
+
+                entity.Property(e => e.Address).HasMaxLength(500);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Country>(entity =>
